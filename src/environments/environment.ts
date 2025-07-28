@@ -1,12 +1,12 @@
-// src/environments/environment.ts
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "your-api-key",
-    authDomain: "your-auth-domain",
-    projectId: "your-project-id",
-    storageBucket: "your-storage-bucket",
-    messagingSenderId: "your-messaging-sender-id",
-    appId: "your-app-id"
+  apiKey: "AIzaSyDV9FhIc6qPcdTTC8yDYS4N3Vw-t2UPC54",
+  authDomain: "chat-app-f2133.firebaseapp.com",
+  projectId: "chat-app-f2133",
+  storageBucket: "chat-app-f2133.firebasestorage.app",
+  messagingSenderId: "711138920959",
+  appId: "1:711138920959:web:44e217dbcd124ad7fbffca",
+  measurementId: "G-SCEFLBEH23"
   }
 };
