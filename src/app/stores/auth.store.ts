@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   User,
+  UserCredential,
 } from '@angular/fire/auth';
 import { Firestore, doc, setDoc, getDoc } from '@angular/fire/firestore';
 
@@ -18,18 +19,19 @@ export interface AppUser {
 export const useAuthStore = createInjectable(() => {
   const auth = inject(Auth);
   const firestore = inject(Firestore);
-  const currentUser = signal<AppUser | null>(null);
+  const currentUser = signal<AppUser | null | any>(null);
 
   auth.onAuthStateChanged(async (user) => {
     if (user) {
-      const appUser = await getUserFromFirestore(user.uid);
-      currentUser.set(appUser);
+      // const appUser = await getUserFromFirestore(user.uid);
+      // currentUser.set(appUser);
     } else {
       currentUser.set(null);
     }
   });
 
   async function getUserFromFirestore(uid: string): Promise<AppUser | null> {
+    debugger
     const userDoc = await getDoc(doc(firestore, `users/${uid}`));
     if (userDoc.exists()) {
       return userDoc.data() as AppUser;
@@ -54,8 +56,8 @@ export const useAuthStore = createInjectable(() => {
         password
       );
       await createUserInFirestore({ ...userCredential.user, displayName });
-      const appUser = await getUserFromFirestore(userCredential.user.uid);
-      currentUser.set(appUser);
+      // const appUser = await getUserFromFirestore(userCredential.user.uid);
+      currentUser.set(userCredential.user);
     } catch (error: any) {
       console.error('Signup error:', error);
       switch (error.code) {
@@ -84,8 +86,8 @@ export const useAuthStore = createInjectable(() => {
         email,
         password
       );
-      const appUser = await getUserFromFirestore(userCredential.user.uid);
-      currentUser.set(appUser);
+      // const appUser = await getUserFromFirestore(userCredential.user.uid);
+      currentUser.set(userCredential.user);
     } catch (error: any) {
       console.error('Login error:', error);
       switch (error.code) {

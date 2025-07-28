@@ -1,9 +1,9 @@
 // src/app/components/login/login.component.ts
-
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { useAuthStore } from '../../stores/auth.store';
+import { ChatListComponent } from '../chat-list/chat-list.component';
 
 @Component({
   selector: 'app-login',

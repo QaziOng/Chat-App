@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { SignupComponent } from '../components/signup/signup.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [SignupComponent],
+  imports: [RouterModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
