@@ -14,6 +14,7 @@ import { ChatListComponent } from '../chat-list/chat-list.component';
 export class LoginComponent {
   email = '';
   password = '';
+  showPassword: boolean = false;               // password visibility
   errorMessage = signal<string | null>(null);
   private authStore = inject(useAuthStore);
   private router = inject(Router);
@@ -33,5 +34,9 @@ export class LoginComponent {
         );
       }
     }
+  }
+
+  togglePasswordVisibility(): void {         // password visibility
+    this.showPassword = !this.showPassword;
   }
 }
