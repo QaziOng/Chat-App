@@ -20,7 +20,7 @@ export class NewChatComponent {
   async onSubmit() {
     try {
       const chatId = await this.chatStore.createNewChat(this.participantEmail);
-      this.router.navigate(['/chat', chatId]);
+      this.router.navigate(['/chat-list', chatId]);
     } catch (error) {
       console.error('New chat error:', error);
       if (error instanceof Error) {
