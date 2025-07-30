@@ -10,7 +10,7 @@
 // export class ChatRoomComponent {
 // }
 
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -27,6 +27,7 @@ import {
   onAuthStateChanged,
 } from '@angular/fire/auth';
 import { collectionData } from '@angular/fire/firestore';
+import { useAuthStore } from '../../stores/auth.store';
 
 @Component({
   selector: 'app-chat-room',
@@ -36,22 +37,35 @@ import { collectionData } from '@angular/fire/firestore';
   styleUrls: ['./chat-room.component.scss']
 })
 export class ChatRoomComponent implements OnInit {
+  @ViewChild('chatContainer') private chatContainer!: ElementRef;
+
   private firestore = inject(Firestore);
   private auth = inject(Auth);
+  private authStore = inject(useAuthStore)
 
   newMessage: string = '';
   messages = signal<any[]>([]);
   userId: string = '';
   userEmail: string = '';
+  user: any = {
+    displayName: ''
+  }
 
-  ngOnInit() {
-    onAuthStateChanged(this.auth, (user) => {
+  async ngOnInit() {
+    onAuthStateChanged(this.auth, async (user) => {
       if (user) {
         this.userId = user.uid;
         this.userEmail = user.email ?? '';
+        this.user = user;
         this.loadMessages();
+        this.user = await this.authStore.getUserFromFirestore(user.uid)
+        console.log(this.user)
       }
     });
+
+  }
+
+  ngAfterViewInit(): void {
   }
 
   loadMessages() {
@@ -60,6 +74,9 @@ export class ChatRoomComponent implements OnInit {
     onSnapshot(q, (snapshot) => {
       const msgs = snapshot.docs.map(doc => doc.data());
       this.messages.set(msgs);
+      setTimeout(() => {
+        this.scrollToBottom()
+      }, 200)
     });
   }
 
@@ -68,8 +85,9 @@ export class ChatRoomComponent implements OnInit {
     if (!trimmed) return;
 
     const messageData = {
-      senderId: this.userId,
-      senderEmail: this.userEmail,
+      senderId: this.user.uid,
+      senderEmail: this.user.email,
+      senderName: this.user.displayName,
       message: trimmed,
       timestamp: Timestamp.now()
     };
@@ -78,8 +96,15 @@ export class ChatRoomComponent implements OnInit {
       const messagesRef = collection(this.firestore, 'messages');
       await addDoc(messagesRef, messageData);
       this.newMessage = '';
+      this.scrollToBottom()
     } catch (err) {
       console.error('Error sending message:', err);
     }
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+    } catch (err) { }
   }
 }

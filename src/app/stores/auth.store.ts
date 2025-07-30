@@ -31,7 +31,6 @@ export const useAuthStore = createInjectable(() => {
   });
 
   async function getUserFromFirestore(uid: string): Promise<AppUser | null> {
-    debugger
     const userDoc = await getDoc(doc(firestore, `users/${uid}`));
     if (userDoc.exists()) {
       return userDoc.data() as AppUser;
@@ -121,5 +120,6 @@ export const useAuthStore = createInjectable(() => {
     signUp,
     login,
     logout,
+    getUserFromFirestore
   };
 });
