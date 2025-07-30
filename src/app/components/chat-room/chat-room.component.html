@@ -1,0 +1,21 @@
+<div class="chat-room-container">
+  <h2>Chat Room</h2>
+
+  <div class="messages">
+    <div *ngFor="let msg of messages()" class="message" [ngClass]="{ 'own-message': msg.senderId === userId }">
+      <strong>{{ msg.senderEmail }}:</strong> {{ msg.message }}
+    </div>
+  </div>
+
+  <form (ngSubmit)="sendMessage()" class="chat-form">
+    <input
+      type="text"
+      [(ngModel)]="newMessage"
+      name="message"
+      required
+      placeholder="Type your message..."
+      class="chat-input"
+    />
+    <button type="submit" [disabled]="!newMessage.trim()">Send</button>
+  </form>
+</div>
