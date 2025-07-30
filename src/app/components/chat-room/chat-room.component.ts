@@ -76,7 +76,7 @@ export class ChatRoomComponent implements OnInit {
       this.messages.set(msgs);
       setTimeout(() => {
         this.scrollToBottom()
-      }, 200)
+      }, 0)
     });
   }
 
@@ -103,8 +103,9 @@ export class ChatRoomComponent implements OnInit {
   }
 
   scrollToBottom(): void {
-    try {
-      this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
-    } catch (err) { }
+    this.chatContainer.nativeElement.scrollTo({
+      top: this.chatContainer.nativeElement.scrollHeight,
+      // behavior: 'smooth'
+    });
   }
 }

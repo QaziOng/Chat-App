@@ -22,7 +22,7 @@ export class ChatListComponent implements OnInit {
     if (userId) {
       this.chatStore.listenToChats(userId);
     } else {
-      this.router.navigate(['/login']);
+      // this.router.navigate(['/login']);
     }
   }
 

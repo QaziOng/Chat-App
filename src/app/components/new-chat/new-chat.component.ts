@@ -28,7 +28,7 @@ export class NewChatComponent {
     try {
       const chatId = await this.chatStore.createNewChat(this.participantEmail);
       if (chatId) {
-        await this.router.navigate(['/chat-room', chatId]);
+        await this.router.navigate(['/home/chat'], { queryParams: { id: chatId } });
       } else {
         this.errorMessage.set('Could not create or find chat.');
       }
