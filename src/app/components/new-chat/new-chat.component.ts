@@ -10,25 +10,34 @@ import { useChatStore } from '../../stores/chat.store';
   standalone: true,
   imports: [FormsModule],
   templateUrl: 'new-chat.component.html',
+  styleUrls: ['./new-chat.component.scss']
 })
 export class NewChatComponent {
   participantEmail = '';
   errorMessage = signal<string | null>(null);
+
   private chatStore = inject(useChatStore);
   private router = inject(Router);
 
   async onSubmit() {
+    if (!this.participantEmail.trim()) {
+      this.errorMessage.set('Please enter a valid email.');
+      return;
+    }
+
     try {
       const chatId = await this.chatStore.createNewChat(this.participantEmail);
-      this.router.navigate(['/chat-list', chatId]);
+      if (chatId) {
+        await this.router.navigate(['/chat-room', chatId]);
+      } else {
+        this.errorMessage.set('Could not create or find chat.');
+      }
     } catch (error) {
       console.error('New chat error:', error);
       if (error instanceof Error) {
         this.errorMessage.set(error.message);
       } else {
-        this.errorMessage.set(
-          'An unexpected error occurred. Please try again.'
-        );
+        this.errorMessage.set('An unexpected error occurred. Please try again.');
       }
     }
   }

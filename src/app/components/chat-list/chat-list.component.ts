@@ -35,6 +35,10 @@ export class ChatListComponent implements OnInit {
     return 'Loading...';
   }
 
+  goToChat(chat: Chat) {
+    this.router.navigate(['/chat-room', chat.id]); // Passes chat.id to route
+  }
+
   logout() {
     this.authStore.logout();
     this.router.navigate(['/login']);

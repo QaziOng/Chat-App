@@ -6,33 +6,32 @@ import { NewChatComponent } from './components/new-chat/new-chat.component';
 import { ChatListComponent } from './components/chat-list/chat-list.component';
 
 export const routes: Routes = [
-    {
-        path: '',
-        pathMatch: 'full',
-        component: HomeComponent
-    },
-    {
-        path: 'signup',
-        component: SignupComponent
-    },
-    {
-        path: 'login',
-        component: LoginComponent
-    },
-    {
-        path: 'chat',
-        component: NewChatComponent
-    },
-    {
-        path: 'chat/:chatId',  // handles dynamic chatId like 'chat/gSmkedYhU3pimSiEyEKp'
-        component: NewChatComponent
-    },
-    {
-        path: 'chat-list',
-        component: ChatListComponent
-    },
-    {
-        path: 'chat-list/:chatId',  // handles 'chat-list/someId'
-        component: ChatListComponent
-    }
+  {
+    path: '',
+    pathMatch: 'full',
+    component: HomeComponent,
+  },
+  {
+    path: 'signup',
+    component: SignupComponent,
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
+  },
+  {
+    path: 'chat',
+    component: NewChatComponent,
+  },
+  {
+    path: 'chat-list',
+    component: ChatListComponent,
+  },
+  {
+    path: 'chat-room/:chatId', // Real-time chat route
+    loadComponent: () =>
+      import('./components/chat-room/chat-room.component').then(
+        (m) => m.ChatRoomComponent
+      ),
+  },
 ];

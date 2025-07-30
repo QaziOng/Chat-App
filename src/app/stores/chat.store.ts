@@ -211,6 +211,8 @@ export const useChatStore = createInjectable(() => {
   const currentChatId = signal<string | null>(null);
   const messages = signal<Message[]>([]);
 
+  let messageUnsubscribe: (() => void) | null = null; // Unsubscribe holder
+
   const currentChat = computed(() =>
     chats().find((chat) => chat.id === currentChatId())
   );
@@ -252,6 +254,12 @@ export const useChatStore = createInjectable(() => {
 
   function listenToMessages(chatId: string) {
     currentChatId.set(chatId);
+
+    // 🧹 Clear previous listener if it exists
+    if (messageUnsubscribe) {
+      messageUnsubscribe();
+    }
+
     const messagesRef = collection(firestore, `chats/${chatId}/messages`);
     const q = query(messagesRef, orderBy('timestamp', 'asc'));
     return onSnapshot(q, (snapshot) => {
