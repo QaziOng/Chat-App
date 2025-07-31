@@ -29,13 +29,13 @@ export const routes: Routes = [
         path: 'chat-list',
         component: ChatListComponent,
     },
-    {
-        path: 'chat-room/:chatId', // Real-time chat route
-        loadComponent: () =>
-            import('./components/chat-room/chat-room.component').then(
-                (m) => m.ChatRoomComponent
-            ),
-    },
+    // {
+    //     path: 'chat-room/:chatId', // Real-time chat route
+    //     loadComponent: () =>
+    //         import('./components/chat-room/chat-room.component').then(
+    //             (m) => m.ChatRoomComponent
+    //         ),
+    // },
     {
         path: 'home',
         loadComponent: () =>
