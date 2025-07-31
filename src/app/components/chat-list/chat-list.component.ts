@@ -21,7 +21,7 @@ export class ChatListComponent implements OnInit {
   openNewChatPopup() {
     this.dialog.open(NewChatComponent, {
       width: '400px', // optional
-      data: {} // optional data you want to pass
+      data: {},
     });
   }
 
