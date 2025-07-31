@@ -22,7 +22,7 @@ export class LoginComponent {
   async onSubmit() {
     try {
       await this.authStore.login(this.email, this.password);
-      this.router.navigate(['/chat']);
+      this.router.navigate(['home']);
       // Navigate to chat list after successful login
     } catch (error) {
       console.error('Login error:', error);
