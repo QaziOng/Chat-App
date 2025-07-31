@@ -27,12 +27,13 @@ import {
   onAuthStateChanged,
 } from '@angular/fire/auth';
 import { collectionData } from '@angular/fire/firestore';
+import { MatDialog, MatDialogModule} from '@angular/material/dialog';
 import { useAuthStore } from '../../stores/auth.store';
 
 @Component({
   selector: 'app-chat-room',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatDialogModule],
   templateUrl: './chat-room.component.html',
   styleUrls: ['./chat-room.component.scss']
 })

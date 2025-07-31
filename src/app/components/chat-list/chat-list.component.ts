@@ -5,14 +5,27 @@ import { Router, RouterModule } from '@angular/router';
 import { Chat, useChatStore } from '../../stores/chat.store';
 import { useAuthStore } from '../../stores/auth.store';
 import { DatePipe } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { NewChatComponent } from '../new-chat/new-chat.component';
 
 @Component({
   selector: 'app-chat-list',
   standalone: true,
-  imports: [RouterModule, DatePipe],
+  imports: [RouterModule, DatePipe, NewChatComponent],
   templateUrl: 'chat-list.component.html',
 })
 export class ChatListComponent implements OnInit {
+
+  constructor(private dialog: MatDialog) {}
+  
+  openNewChatPopup() {
+    this.dialog.open(NewChatComponent, {
+      width: '400px', // optional
+      data: {} // optional data you want to pass
+    });
+  }
+
+
   chatStore = inject(useChatStore);
   authStore = inject(useAuthStore);
   router = inject(Router);

@@ -4,6 +4,8 @@ import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { useChatStore } from '../../stores/chat.store';
+import { MatDialogRef } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-new-chat',
@@ -13,6 +15,14 @@ import { useChatStore } from '../../stores/chat.store';
   styleUrls: ['./new-chat.component.scss']
 })
 export class NewChatComponent {
+
+  constructor(private dialogRef: MatDialogRef<NewChatComponent>) {}
+
+  close() {
+    this.dialogRef.close();
+  }
+
+
   participantEmail = '';
   errorMessage = signal<string | null>(null);
 

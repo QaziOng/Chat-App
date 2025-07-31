@@ -65,7 +65,7 @@ export class SignupComponent {
     try {
       console.log(this.displayName);
       await this.authStore.signUp(this.email, this.password, this.displayName);
-      this.router.navigate(['/chat']);
+      this.router.navigate(['/home/chat']);
     } catch (error) {
       console.error('Signup error:', error);
       if (error instanceof Error) {
