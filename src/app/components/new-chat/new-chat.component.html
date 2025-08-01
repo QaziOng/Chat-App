@@ -1,35 +1,46 @@
-<div class="modal-overlay">
-<div class="new-chat-container">
-  <div class="new-chat-header">
-    <h2>Start a New Chat</h2>
-  </div>
+<div class="modal-overlay" (click)="onBackdropClick($event)">
+  <div class="new-chat-container" (click)="$event.stopPropagation()">
+    <div class="new-chat-header">
+      <h2>Start a New Chat</h2>
+    </div>
 
-  <div class="new-chat-form-container">
-    <div class="new-chat-form-box">
-      @if (errorMessage()) {
-        <div class="error-message" role="alert">
+    <div class="new-chat-form-container">
+      <div class="new-chat-form-box">
+
+        <!-- Show error if exists -->
+        <div *ngIf="errorMessage()" class="error-message" role="alert">
           <span>{{ errorMessage() }}</span>
         </div>
-      }
 
-      <form (ngSubmit)="onSubmit()" class="new-chat-form">
-        <div class="form-group">
-          <label for="email">Participant's Email</label>
+        <!-- Search Bar -->
+        <div class="search-bar">    
           <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            [(ngModel)]="participantEmail"
+            type="text"
+            placeholder="Enter User's Name"
+            [(ngModel)]="searchQuery"
+            (keyup.enter)="searchUsers()"
           />
+          <button (click)="searchUsers()" class="search-icon">
+            <i class="fas fa-search"></i>
+          </button>
         </div>
 
-        <div class="form-group">
-          <button type="submit" (click)="close()">Start Chat</button>
+        <!-- List of users -->
+        <div class="user-list" *ngIf="filteredUsers.length > 0">
+          <div
+            class="user-item"
+            *ngFor="let user of filteredUsers"
+            (click)="startChat(user)"
+          >
+            {{ user.name }}
+          </div>
         </div>
-        <button (click)="close()" class="btn btn-danger" >Close</button>
 
-      </form>
+        <!-- No results -->
+        <div class="no-results" *ngIf="searchPerformed && filteredUsers.length === 0">
+          No users found.
+        </div>
+
       </div>
     </div>
   </div>
