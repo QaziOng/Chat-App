@@ -21,15 +21,16 @@ import {
   addDoc,
   onSnapshot,
   Timestamp,
+  where,
 } from '@angular/fire/firestore';
 import {
   Auth,
   onAuthStateChanged,
 } from '@angular/fire/auth';
 import { collectionData } from '@angular/fire/firestore';
-import { MatDialog, MatDialogModule} from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { useAuthStore } from '../../stores/auth.store';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-chat-room',
@@ -53,27 +54,25 @@ export class ChatRoomComponent implements OnInit {
     displayName: ''
   }
 
-//Fixes by ChatGPT for getting messages from a single chat ID for only 2 participants
+  //Fixes by ChatGPT for getting messages from a single chat ID for only 2 participants
 
-chatId!: string;
-messagesList: any[] = [];
+  chatId!: string;
+  messagesList: any[] = [];
 
-// this.router.navigate(['/chat', chatId]);
-
-// ngOnInit() {
-//   this.route.paramMap.subscribe(params => {
-//     this.chatId = params.get('chatId')!;
-//     this.loadMessages();
-//   });
-// }
+  constructor(private route: ActivatedRoute) {
+  }
 
   async ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.chatId = params['id'];
+      this.loadMessages();
+    });
     onAuthStateChanged(this.auth, async (user) => {
       if (user) {
         this.userId = user.uid;
         this.userEmail = user.email ?? '';
         this.user = user;
-        this.loadMessages();
+        // this.loadMessages();
         this.user = await this.authStore.getUserFromFirestore(user.uid)
         console.log(this.user)
       }
@@ -84,39 +83,21 @@ messagesList: any[] = [];
   ngAfterViewInit(): void {
   }
 
-//   loadMessages() {
-//   const messagesRef = collection(this.firestore, `chats/${this.chatId}/messages`);
-//   const q = query(messagesRef, orderBy('timestamp'));
-
-//   onSnapshot(q, snapshot => {
-//     this.messagesList = snapshot.docs.map(doc => doc.data());
-//   });
-// }
-
-// async sendMessage() {
-//   const message = {
-//     senderId: this.userId,
-//     senderEmail: this.userEmail,
-//     message: this.newMessage,
-//     timestamp: Timestamp.now()
-//   };
-
-//   const messagesRef = collection(this.firestore, `chats/${this.chatId}/messages`);
-//   await addDoc(messagesRef, message);
-
-//   this.newMessage = '';
-// }
-
   loadMessages() {
-    const messagesRef = collection(this.firestore, `chats/${this.chatId}/messages`);
-    // const messagesRef = collection(this.firestore, 'messages');
-    const q = query(messagesRef, orderBy('timestamp'));
+    debugger
+    // const messagesRef = collection(this.firestore, `chats/${this.chatId}/messages`);
+    const messagesRef = collection(this.firestore, 'messages');
+    const q = query(
+      messagesRef,
+      where('chatId', '==', this.chatId),
+      orderBy('timestamp')
+    );
     onSnapshot(q, (snapshot) => {
       const msgs = snapshot.docs.map(doc => doc.data());
       this.messages.set(msgs);
       setTimeout(() => {
-        this.scrollToBottom()
-      }, 0)
+        this.scrollToBottom();
+      }, 0);
     });
   }
 
@@ -129,12 +110,13 @@ messagesList: any[] = [];
       senderEmail: this.user.email,
       senderName: this.user.displayName,
       message: trimmed,
-      timestamp: Timestamp.now()
+      timestamp: Timestamp.now(),
+      chatId: this.chatId
     };
 
     try {
-      const messagesRef = collection(this.firestore, `chats/${this.chatId}/messages`);
-      // const messagesRef = collection(this.firestore, 'messages');
+      // const messagesRef = collection(this.firestore, `chats/${this.chatId}/messages`);
+      const messagesRef = collection(this.firestore, 'messages');
       await addDoc(messagesRef, messageData);
       this.newMessage = '';
       this.scrollToBottom()
