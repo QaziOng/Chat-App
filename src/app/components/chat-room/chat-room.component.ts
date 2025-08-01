@@ -29,6 +29,7 @@ import {
 import { collectionData } from '@angular/fire/firestore';
 import { MatDialog, MatDialogModule} from '@angular/material/dialog';
 import { useAuthStore } from '../../stores/auth.store';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-chat-room',
@@ -52,6 +53,20 @@ export class ChatRoomComponent implements OnInit {
     displayName: ''
   }
 
+//Fixes by ChatGPT for getting messages from a single chat ID for only 2 participants
+
+chatId!: string;
+messagesList: any[] = [];
+
+// this.router.navigate(['/chat', chatId]);
+
+// ngOnInit() {
+//   this.route.paramMap.subscribe(params => {
+//     this.chatId = params.get('chatId')!;
+//     this.loadMessages();
+//   });
+// }
+
   async ngOnInit() {
     onAuthStateChanged(this.auth, async (user) => {
       if (user) {
@@ -69,8 +84,32 @@ export class ChatRoomComponent implements OnInit {
   ngAfterViewInit(): void {
   }
 
+//   loadMessages() {
+//   const messagesRef = collection(this.firestore, `chats/${this.chatId}/messages`);
+//   const q = query(messagesRef, orderBy('timestamp'));
+
+//   onSnapshot(q, snapshot => {
+//     this.messagesList = snapshot.docs.map(doc => doc.data());
+//   });
+// }
+
+// async sendMessage() {
+//   const message = {
+//     senderId: this.userId,
+//     senderEmail: this.userEmail,
+//     message: this.newMessage,
+//     timestamp: Timestamp.now()
+//   };
+
+//   const messagesRef = collection(this.firestore, `chats/${this.chatId}/messages`);
+//   await addDoc(messagesRef, message);
+
+//   this.newMessage = '';
+// }
+
   loadMessages() {
-    const messagesRef = collection(this.firestore, 'messages');
+    const messagesRef = collection(this.firestore, `chats/${this.chatId}/messages`);
+    // const messagesRef = collection(this.firestore, 'messages');
     const q = query(messagesRef, orderBy('timestamp'));
     onSnapshot(q, (snapshot) => {
       const msgs = snapshot.docs.map(doc => doc.data());
@@ -94,7 +133,8 @@ export class ChatRoomComponent implements OnInit {
     };
 
     try {
-      const messagesRef = collection(this.firestore, 'messages');
+      const messagesRef = collection(this.firestore, `chats/${this.chatId}/messages`);
+      // const messagesRef = collection(this.firestore, 'messages');
       await addDoc(messagesRef, messageData);
       this.newMessage = '';
       this.scrollToBottom()
