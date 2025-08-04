@@ -10,8 +10,8 @@ import { ChatRoomComponent } from './components/chat-room/chat-room.component';
 export const routes: Routes = [
     {
         path: '',
-        pathMatch: 'full',
-        component: HomeComponent,
+        redirectTo: '/login',
+        pathMatch: 'full'
     },
     {
         path: 'signup',
