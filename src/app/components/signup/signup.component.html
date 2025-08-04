@@ -1,67 +1,59 @@
 <div class="signup-component-container">
-  <div class="w-full max-w-md mx-auto">
-    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-      Create a new account
-    </h2>
+  <div class="signup-header">
+    <h2>Create a new account</h2>
   </div>
 
-  <div class="mt-8 w-full max-w-md mx-auto">
-    <div class="bg-white py-8 px-6 shadow rounded-lg">
+  <div class="signup-form-wrapper">
+    <div class="signup-form-box">
       @if (errorMessage()) {
-        <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded" role="alert">
+        <div class="error-message" role="alert">
           <span>{{ errorMessage() }}</span>
         </div>
       }
 
-      <form (ngSubmit)="onSubmit()" class="space-y-6">
+      <form (ngSubmit)="onSubmit()" class="signup-form">
         <!-- Email -->
-        <div>
-          <label for="email" class="block text-sm font-medium text-gray-700">
-            Email address
-          </label>
+        <div class="form-group">
+          <label for="email">Email address</label>
           <input
             id="email"
             name="email"
             type="email"
             required
             [(ngModel)]="email"
-            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+            class="form-control"
           />
         </div>
 
         <!-- Display Name -->
-        <div>
-          <label for="displayName" class="block text-sm font-medium text-gray-700">
-            Display Name
-          </label>
+        <div class="form-group">
+          <label for="displayName">Display Name</label>
           <input
             id="displayName"
             name="displayName"
             type="text"
             required
             [(ngModel)]="displayName"
-            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+            class="form-control"
           />
         </div>
 
         <!-- Password with toggle -->
-        <div>
-          <label for="password" class="block text-sm font-medium text-gray-700">
-            Password
-          </label>
-          <div class="mt-1 relative">
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="password-wrapper">
             <input
               id="password"
               name="password"
               [type]="showPassword ? 'text' : 'password'"
               required
               [(ngModel)]="password"
-              class="block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+              class="form-control"
             />
             <button
               type="button"
               (click)="togglePasswordVisibility()"
-              class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-gray-500"
+              class="toggle-password-btn"
               tabindex="-1"
             >
               {{ showPassword ? '😌' : '👁️' }}
@@ -70,36 +62,23 @@
         </div>
 
         <!-- Submit Button -->
-        <div>
-          <button
-            type="submit"
-            class="w-full flex justify-center py-2 px-4 rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
+        <div class="form-group">
+          <button type="submit" class="submit-btn">
             Sign up
           </button>
         </div>
       </form>
 
       <!-- Divider -->
-      <div class="mt-6">
-        <div class="relative">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-gray-300"></div>
-          </div>
-          <div class="relative flex justify-center text-sm">
-            <span class="px-2 bg-white text-gray-500">Or</span>
-          </div>
-        </div>
+      <div class="divider">
+        <span>Or</span>
+      </div>
 
-        <!-- Link to Login -->
-        <div class="mt-6">
-          <a
-            routerLink="/login"
-            class="w-full flex justify-center py-2 px-4 rounded-md shadow-sm text-sm font-medium text-indigo-600 bg-white hover:bg-gray-50"
-          >
-            Sign in to existing account
-          </a>
-        </div>
+      <!-- Link to Login -->
+      <div class="form-group">
+        <a routerLink="/login" class="link-btn">
+          Sign in to existing account
+        </a>
       </div>
     </div>
   </div>

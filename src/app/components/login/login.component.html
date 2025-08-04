@@ -1,62 +1,48 @@
-<!-- login.component.html -->
-<div
-  class="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8"
->
-  <div class="sm:mx-auto sm:w-full sm:max-w-md">
-    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-      Sign in to your account
-    </h2>
+<div class="login-component-container">
+  <div class="login-header">
+    <h2>Sign in to your account</h2>
   </div>
 
-  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-    <div class="bg-white py-8 px-4 shadow rounded-xl sm:px-10 login-form">
+  <div class="login-form-wrapper">
+    <div class="login-form-box">
       <!-- Error Message -->
       @if (errorMessage()) {
-      <div
-        class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-        role="alert"
-      >
-        <span class="block sm:inline">{{ errorMessage() }}</span>
-      </div>
+        <div class="error-message" role="alert">
+          <span>{{ errorMessage() }}</span>
+        </div>
       }
 
       <!-- Login Form -->
-      <form (ngSubmit)="onSubmit()" class="space-y-6">
+      <form (ngSubmit)="onSubmit()" class="login-form">
         <!-- Email Field -->
-        <div>
-          <label for="email" class="block text-sm font-medium text-gray-700">
-            Email address
-          </label>
-          <div class="mt-1">
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              [(ngModel)]="email"
-              class="form-input"
-            />
-          </div>
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            [(ngModel)]="email"
+            class="form-control"
+          />
         </div>
 
         <!-- Password Field with Toggle -->
-        <div>
-          <label for="password" class="block text-sm font-medium text-gray-700">
-            Password
-          </label>
-          <div class="mt-1 relative">
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="password-wrapper">
             <input
               id="password"
               name="password"
               [type]="showPassword ? 'text' : 'password'"
               required
               [(ngModel)]="password"
-              class="form-input pr-10"
+              class="form-control"
             />
             <button
               type="button"
               (click)="togglePasswordVisibility()"
-              class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 text-gray-500"
+              class="toggle-password-btn"
               tabindex="-1"
             >
               {{ showPassword ? '😌' : '👁️' }}
@@ -65,33 +51,23 @@
         </div>
 
         <!-- Submit Button -->
-        <div>
-          <button type="submit" class="btn-primary">
+        <div class="form-group">
+          <button type="submit" class="submit-btn">
             Sign in
           </button>
         </div>
       </form>
 
       <!-- Divider -->
-      <div class="mt-6">
-        <div class="relative">
-          <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-gray-300"></div>
-          </div>
-          <div class="relative flex justify-center text-sm">
-            <span class="px-2 bg-white text-gray-500"> Or </span>
-          </div>
-        </div>
+      <div class="divider">
+        <span>Or</span>
+      </div>
 
-        <!-- Signup Link -->
-        <div class="mt-6">
-          <a
-            routerLink="/signup"
-            class="btn-secondary text-indigo-600 hover:text-indigo-800"
-          >
-            Create new account
-          </a>
-        </div>
+      <!-- Signup Link -->
+      <div class="form-group">
+        <a routerLink="/signup" class="link-btn">
+          Create new account
+        </a>
       </div>
     </div>
   </div>

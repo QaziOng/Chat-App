@@ -10,6 +10,7 @@ import { ChatListComponent } from '../chat-list/chat-list.component';
   standalone: true,
   imports: [FormsModule, RouterModule],
   templateUrl: 'login.component.html',
+  styleUrl: 'login.component.scss'
 })
 export class LoginComponent {
   email = '';
