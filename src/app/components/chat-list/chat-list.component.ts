@@ -13,6 +13,7 @@ import { NewChatComponent } from '../new-chat/new-chat.component';
   standalone: true,
   imports: [RouterModule, DatePipe, NewChatComponent],
   templateUrl: 'chat-list.component.html',
+  styleUrl: 'chat-list.component.scss',
 })
 export class ChatListComponent implements OnInit {
 
