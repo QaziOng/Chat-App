@@ -1,9 +1,11 @@
 <div class="chat-room-container">
-  <h2>Chat Room</h2>
+  <h2>{{getReceiverName()}}</h2>
+  
 
   <div class="messages" #chatContainer>
     <div *ngFor="let msg of messages()" class="message" [ngClass]="{ 'own-message': msg.senderId === userId }">
-      <strong>{{ msg.senderName ? msg.senderName : msg.senderEmail }}:</strong> {{ msg.message }}
+      <!-- <strong>{{ msg.senderName ? msg.senderName : msg.senderEmail }}:</strong> -->
+      {{ msg.message }}
     </div>
   </div>
 

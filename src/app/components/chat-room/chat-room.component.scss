@@ -25,7 +25,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    scroll-behavior: smooth;
+    // scroll-behavior: smooth;
     background-color: #f9fafb;
     border-radius: 1rem;
   }
@@ -35,6 +35,7 @@
     color: #111827;
     padding: 0.8rem 1.2rem;
     border-radius: 1rem;
+    width: fit-content;
     max-width: 70%;
     word-wrap: break-word;
     font-size: 0.95rem;

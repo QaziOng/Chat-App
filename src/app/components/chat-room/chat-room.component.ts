@@ -62,6 +62,14 @@ export class ChatRoomComponent implements OnInit {
   constructor(private route: ActivatedRoute) {
   }
 
+  //For heading we get name for the Sender
+  getReceiverName(): string {
+    const msgs = this.messages();
+    const receiver = msgs.find(msg => msg.senderId !== this.userId);
+    return receiver ? (receiver.senderName || receiver.senderEmail) : 'Chat';
+  }
+  
+
   async ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.chatId = params['id'];
@@ -84,7 +92,7 @@ export class ChatRoomComponent implements OnInit {
   }
 
   loadMessages() {
-    debugger
+   
     // const messagesRef = collection(this.firestore, `chats/${this.chatId}/messages`);
     const messagesRef = collection(this.firestore, 'messages');
     const q = query(
