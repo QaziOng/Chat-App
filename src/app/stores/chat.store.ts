@@ -118,6 +118,7 @@ export const useChatStore = createInjectable(() => {
 
   /** Send a message to a chat */
   async function sendMessage(chatId: string, senderId: string, text: string) {
+    debugger
     const messagesRef = collection(firestore, `chats/${chatId}/messages`);
 
     await addDoc(messagesRef, {

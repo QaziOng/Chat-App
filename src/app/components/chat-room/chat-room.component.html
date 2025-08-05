@@ -7,6 +7,9 @@
     <div *ngFor="let msg of messages()" class="message" [ngClass]="{ 'own-message': msg.senderId === userId }">
       <!-- <strong>{{ msg.senderName ? msg.senderName : msg.senderEmail }}:</strong> -->
       {{ msg.message }}
+      <div class="timeStamp">
+        {{msg.timestamp?.toDate() | date: getDateFormat(msg.timestamp)}}
+      </div>
     </div>
   </div>
 

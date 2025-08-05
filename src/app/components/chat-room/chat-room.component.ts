@@ -139,4 +139,20 @@ export class ChatRoomComponent implements OnInit {
       // behavior: 'smooth'
     });
   }
+
+  //Check if its Today
+  isToday(date: Date): boolean {
+    const today = new Date();
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    );
+  }
+
+  getDateFormat(timestamp: any): string {
+    const date = timestamp.toDate(); // Firestore Timestamp to JS Date
+    return this.isToday(date) ? 'shortTime' : 'medium';
+  }
+
 }
