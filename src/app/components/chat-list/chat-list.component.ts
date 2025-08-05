@@ -11,7 +11,7 @@ import { NewChatComponent } from '../new-chat/new-chat.component';
 @Component({
   selector: 'app-chat-list',
   standalone: true,
-  imports: [RouterModule, DatePipe, NewChatComponent],
+  imports: [RouterModule, DatePipe],
   templateUrl: 'chat-list.component.html',
   styleUrl: 'chat-list.component.scss',
 })
