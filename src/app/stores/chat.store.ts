@@ -55,14 +55,14 @@ export const useChatStore = createInjectable(() => {
     }
   });
 
-  /** 🔍 Get user info by UID */
+  /** Get user info by UID */
   async function getUserByUid(uid: string): Promise<AppUser | null> {
     const docRef = doc(firestore, `users/${uid}`);
     const snap = await getDoc(docRef);
     return snap.exists() ? (snap.data() as AppUser) : null;
   }
 
-  /** 🔍 Get user info by email */
+  /** Get user info by email */
   async function getUserByEmail(email: string): Promise<AppUser | null> {
     const usersRef = collection(firestore, 'users');
     const q = query(usersRef, where('email', '==', email));
@@ -70,7 +70,7 @@ export const useChatStore = createInjectable(() => {
     return snap.empty ? null : (snap.docs[0].data() as AppUser);
   }
 
-  /** 🧠 Get readable name of a user */
+  /** Get readable name of a user */
   async function getUserName(userId: string): Promise<string> {
     const user = await getUserByUid(userId);
     return user?.displayName || user?.email || 'Unknown User';
@@ -80,7 +80,7 @@ export const useChatStore = createInjectable(() => {
     return await Promise.all(participantIds.map(getUserName));
   }
 
-  /** 📡 Listen to chats in real-time */
+  /** Listen to chats in real-time */
   function listenToChats(userId: string) {
     const chatsRef = collection(firestore, 'chats');
     const q = query(chatsRef, where('participants', 'array-contains', userId));
@@ -97,7 +97,7 @@ export const useChatStore = createInjectable(() => {
     });
   }
 
-  /** 📡 Listen to messages in a specific chat */
+  /** Listen to messages in a specific chat */
   function listenToMessages(chatId: string) {
     currentChatId.set(chatId);
 
@@ -116,7 +116,7 @@ export const useChatStore = createInjectable(() => {
     });
   }
 
-  /** 💬 Send a message to a chat */
+  /** Send a message to a chat */
   async function sendMessage(chatId: string, senderId: string, text: string) {
     const messagesRef = collection(firestore, `chats/${chatId}/messages`);
 
@@ -133,12 +133,12 @@ export const useChatStore = createInjectable(() => {
     });
   }
 
-  /** 🔁 Start or reuse existing chat with another user (by email or uid) */
+  /** Start or reuse existing chat with another user (by email or uid) */
   async function createNewChat(participantEmailOrUid: string): Promise<string> {
     const currentUser = authStore.currentUser();
     if (!currentUser) throw new Error('You must be logged in to start a chat');
 
-    // 🔍 Support both email or uid
+    // Support both email or uid
     const isEmail = participantEmailOrUid.includes('@');
     const participantUser = isEmail
       ? await getUserByEmail(participantEmailOrUid)
@@ -151,7 +151,7 @@ export const useChatStore = createInjectable(() => {
     const participants = [currentUser.uid, participantUser.uid];
     const participantsKey = [...participants].sort().join('_');
 
-    // 🧾 Check if chat already exists
+    // Check if chat already exists
     const chatsRef = collection(firestore, 'chats');
     const existingQuery = query(chatsRef, where('participantsKey', '==', participantsKey));
     const existingSnap = await getDocs(existingQuery);
@@ -160,7 +160,7 @@ export const useChatStore = createInjectable(() => {
       return existingSnap.docs[0].id;
     }
 
-    // 💥 Create new chat
+    // Create new chat
     const newChat = await addDoc(chatsRef, {
       participants,
       participantsKey,
