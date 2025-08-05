@@ -68,7 +68,7 @@ export class ChatRoomComponent implements OnInit {
     const receiver = msgs.find(msg => msg.senderId !== this.userId);
     return receiver ? (receiver.senderName || receiver.senderEmail) : 'Chat';
   }
-  
+
 
   async ngOnInit() {
     this.route.queryParams.subscribe(params => {
