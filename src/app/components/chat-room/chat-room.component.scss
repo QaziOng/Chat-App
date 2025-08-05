@@ -40,6 +40,8 @@
     font-size: 0.95rem;
     line-height: 1.5;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-top-left-radius: 0;
+
 
     strong {
       font-weight: 600;
@@ -50,7 +52,8 @@
       background-color: #6366f1;
       color: white;
       align-self: flex-end;
-      border-bottom-right-radius: 0;
+      border-top-right-radius: 0;
+      border-top-left-radius: 1rem;
       box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
     }
   }
