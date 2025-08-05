@@ -7,16 +7,16 @@
     <div class="new-chat-form-container">
       <div class="new-chat-form-box">
 
-        <!-- Show error if exists -->
+        <!-- Error -->
         <div *ngIf="errorMessage()" class="error-message" role="alert">
           <span>{{ errorMessage() }}</span>
         </div>
 
         <!-- Search Bar -->
-        <div class="search-bar">    
+        <div class="search-bar">
           <input
             type="text"
-            placeholder="Enter User's Name"
+            placeholder="Enter user's name or email"
             [(ngModel)]="searchQuery"
             (keyup.enter)="searchUsers()"
           />
@@ -25,18 +25,18 @@
           </button>
         </div>
 
-        <!-- List of users -->
+        <!-- Users List -->
         <div class="user-list" *ngIf="filteredUsers.length > 0">
           <div
             class="user-item"
             *ngFor="let user of filteredUsers"
             (click)="startChat(user)"
           >
-            {{ user.name }}
+            {{ user.displayName || user.email }}
           </div>
         </div>
 
-        <!-- No results -->
+        <!-- No Results -->
         <div class="no-results" *ngIf="searchPerformed && filteredUsers.length === 0">
           No users found.
         </div>
