@@ -54,7 +54,7 @@ export class ChatRoomComponent implements OnInit {
     displayName: ''
   }
 
-  //Fixes by ChatGPT for getting messages from a single chat ID for only 2 participants
+  // for getting messages from a single chat ID for only 2 participants
 
   chatId!: string;
   messagesList: any[] = [];
@@ -113,6 +113,8 @@ export class ChatRoomComponent implements OnInit {
     const trimmed = this.newMessage.trim();
     if (!trimmed) return;
 
+    this.newMessage = ''; // moved up to avoid delay in messages
+
     const messageData = {
       senderId: this.user.uid,
       senderEmail: this.user.email,
@@ -126,7 +128,7 @@ export class ChatRoomComponent implements OnInit {
       // const messagesRef = collection(this.firestore, `chats/${this.chatId}/messages`);
       const messagesRef = collection(this.firestore, 'messages');
       await addDoc(messagesRef, messageData);
-      this.newMessage = '';
+     
       this.scrollToBottom()
     } catch (err) {
       console.error('Error sending message:', err);
