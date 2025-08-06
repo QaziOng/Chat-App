@@ -31,6 +31,7 @@ import { collectionData } from '@angular/fire/firestore';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { useAuthStore } from '../../stores/auth.store';
 import { ActivatedRoute, Router } from '@angular/router';
+import { useChatStore } from '../../stores/chat.store';
 
 @Component({
   selector: 'app-chat-room',
@@ -45,6 +46,7 @@ export class ChatRoomComponent implements OnInit {
   private firestore = inject(Firestore);
   private auth = inject(Auth);
   private authStore = inject(useAuthStore)
+  private chatStore = inject(useChatStore)
 
   newMessage: string = '';
   messages = signal<any[]>([]);
