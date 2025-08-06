@@ -1,4 +1,4 @@
-<div class="chat-room-container">
+<!-- <div class="chat-room-container">
     
   <h2>{{getReceiverName()}}</h2>
   
@@ -9,8 +9,8 @@
     class="message" 
     [ngClass]="{ 'own-message': msg.senderId === userId }">
     
-      <!-- <strong>{{ msg.senderName ? msg.senderName : msg.senderEmail }}:</strong> -->
-      {{ msg.message }}
+      <-- <strong>{{ msg.senderName ? msg.senderName : msg.senderEmail }}:</strong> -->
+      <!-- {{ msg.message }}
       <div class="timeStamp"> 
         {{msg.timestamp?.toDate() | date: getDateFormat(msg.timestamp)}} 
       </div>
@@ -29,4 +29,41 @@
     />
     <button type="submit" [disabled]="!newMessage.trim()">Send</button>
   </form>
+</div> --> 
+
+<div class="chat-room-container">
+  <h2>{{ getReceiverName() }}</h2>
+
+  <div class="messages" #chatContainer>
+    <div 
+      *ngFor="let msg of messages()" 
+      class="message"
+      [ngClass]="[
+        msg.senderId === userId ? 'own-message' : 'received-message',
+        msg.isSingle ? 'single' : '',
+        msg.isFirstInGroup ? 'first' : '',
+        msg.isMiddleInGroup ? 'middle' : '',
+        msg.isLastInGroup ? 'last' : ''
+      ]"
+    >
+      {{ msg.message }}
+      <div class="timeStamp">
+        <!-- {{ msg.timestamp?.toDate() | date: getDateFormat(msg.timestamp) }} -->
+      </div>
+    </div>
+  </div>
+
+  <form (ngSubmit)="sendMessage()" class="chat-form">
+    <input
+      type="text"
+      [(ngModel)]="newMessage"
+      name="message"
+      required
+      placeholder="Type your message..."
+      class="chat-input"
+      autocomplete="off"  
+    />
+    <button type="submit" [disabled]="!newMessage.trim()">Send</button>
+  </form>
 </div>
+
