@@ -34,7 +34,7 @@ export class NewChatComponent {
   private dialogRef = inject(MatDialogRef<NewChatComponent>);
 
   async searchUsers(): Promise<void> {
-    const queryText = this.searchQuery.trim().toLowerCase();
+    const queryText = this.searchQuery.trim();
     this.searchPerformed = true;
 
     if (!queryText) {
