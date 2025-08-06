@@ -51,17 +51,22 @@
     }
 
     &.own-message {
-      background-color: #6366f1;
+      background-color: #3e73ff;
       color: white;
       align-self: flex-end;
       border-top-right-radius: 0;
       border-top-left-radius: 1rem;
       box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
+
+        .timeStamp {
+          color: #ffffff; // white for own messages
+        }
+
     }
 
     .timeStamp {
       font-size: 0.75rem;      /* Smaller text */
-      color: #888888;          /* Light gray color */
+      color: #000000;          /* Light gray color */
       opacity: 0.8;            /* Slightly faded */
       margin-top: 4px;         /* Small space from message */
       display: block;          /* Ensure it's on a new line */
