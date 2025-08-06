@@ -109,6 +109,9 @@
 .chat-message-preview {
   font-size: 0.9rem;
   color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .no-chats-message {
