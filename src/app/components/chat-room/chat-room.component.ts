@@ -1,15 +1,3 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-chat-room',
-//   standalone: true,
-//   imports: [],
-//   templateUrl: './chat-room.component.html',
-//   styleUrl: './chat-room.component.scss'
-// })
-// export class ChatRoomComponent {
-// }
-
 import { Component, ElementRef, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -94,20 +82,47 @@ export class ChatRoomComponent implements OnInit {
   }
 
   loadMessages() {
-   
-    // const messagesRef = collection(this.firestore, `chats/${this.chatId}/messages`);
-    const messagesRef = collection(this.firestore, 'messages');
-    const q = query(
-      messagesRef,
-      where('chatId', '==', this.chatId),
-      orderBy('timestamp')
-    );
-    onSnapshot(q, (snapshot) => {
-      const msgs = snapshot.docs.map(doc => doc.data());
-      this.messages.set(msgs);
-      setTimeout(() => {
-        this.scrollToBottom();
-      }, 0);
+  const messagesRef = collection(this.firestore, 'messages');
+  const q = query(
+    messagesRef,
+    where('chatId', '==', this.chatId),
+    orderBy('timestamp')
+  );
+
+  onSnapshot(q, (snapshot) => {
+    const msgs = snapshot.docs.map(doc => doc.data());
+
+    // 🟢 Group messages before rendering
+    const grouped = this.groupMessages(msgs);
+    this.messages.set(grouped);
+
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 0);
+  });
+}
+
+  groupMessages(msgs: any[]): any[] {
+    return msgs.map((msg, i, arr) => {
+      const prev = arr[i - 1];
+      const next = arr[i + 1];
+      const isOwn = msg.senderId === this.userId;
+
+      const isSameSenderAsPrev = prev?.senderId === msg.senderId;
+      const isSameSenderAsNext = next?.senderId === msg.senderId;
+
+      const isFirstInGroup = !isSameSenderAsPrev && isSameSenderAsNext;
+      const isMiddleInGroup = isSameSenderAsPrev && isSameSenderAsNext;
+      const isLastInGroup = isSameSenderAsPrev && !isSameSenderAsNext;
+      const isSingle = !isSameSenderAsPrev && !isSameSenderAsNext;
+
+      return {
+        ...msg,
+        isFirstInGroup,
+        isMiddleInGroup,
+        isLastInGroup,
+        isSingle
+      };
     });
   }
 
