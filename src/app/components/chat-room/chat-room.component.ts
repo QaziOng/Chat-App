@@ -1,15 +1,3 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-chat-room',
-//   standalone: true,
-//   imports: [],
-//   templateUrl: './chat-room.component.html',
-//   styleUrl: './chat-room.component.scss'
-// })
-// export class ChatRoomComponent {
-// }
-
 import { Component, ElementRef, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -27,10 +15,9 @@ import {
   Auth,
   onAuthStateChanged,
 } from '@angular/fire/auth';
-import { collectionData } from '@angular/fire/firestore';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { useAuthStore } from '../../stores/auth.store';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { useChatStore } from '../../stores/chat.store';
 
 @Component({
@@ -45,77 +32,72 @@ export class ChatRoomComponent implements OnInit {
 
   private firestore = inject(Firestore);
   private auth = inject(Auth);
-  private authStore = inject(useAuthStore)
-  private chatStore = inject(useChatStore)
+  private authStore = inject(useAuthStore);
+  private chatStore = inject(useChatStore);
 
   newMessage: string = '';
   messages = signal<any[]>([]);
   userId: string = '';
   userEmail: string = '';
-  user: any = {
-    displayName: ''
-  }
-
-  // for getting messages from a single chat ID for only 2 participants
-
+  user: any = { displayName: '' };
   chatId!: string;
-  messagesList: any[] = [];
 
-  constructor(private route: ActivatedRoute) {
-  }
+  private hasLoadedMessages = false; // ✅ Prevents double loading
 
-  //For heading we get name for the Sender
+  constructor(private route: ActivatedRoute) {}
+
   getReceiverName(): string {
     const msgs = this.messages();
     const receiver = msgs.find(msg => msg.senderId !== this.userId);
     return receiver ? (receiver.senderName || receiver.senderEmail) : 'Chat';
   }
 
-
-  async ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.chatId = params['id'];
-      this.loadMessages();
-    });
+  async ngOnInit() 
+  {
+    //  Get user once, then load messages after auth & chatId are ready
     onAuthStateChanged(this.auth, async (user) => {
-      if (user) {
+      if (user) 
+        {
         this.userId = user.uid;
         this.userEmail = user.email ?? '';
-        this.user = user;
-        // this.loadMessages();
-        this.user = await this.authStore.getUserFromFirestore(user.uid)
-        console.log(this.user)
+        this.user = await this.authStore.getUserFromFirestore(user.uid);
+        console.log(this.user);
+
+        this.route.queryParams.subscribe(params => {
+          this.chatId = params['id'];
+
+          if (this.chatId && !this.hasLoadedMessages) 
+          {
+            this.loadMessages(); // ✅ Load only once
+            this.hasLoadedMessages = true;
+          }
+        });
       }
     });
-
   }
 
-  ngAfterViewInit(): void {
-  }
-
-  loadMessages() {
-   
-    // const messagesRef = collection(this.firestore, `chats/${this.chatId}/messages`);
+  loadMessages() 
+  {
     const messagesRef = collection(this.firestore, 'messages');
     const q = query(
       messagesRef,
       where('chatId', '==', this.chatId),
       orderBy('timestamp')
     );
+
     onSnapshot(q, (snapshot) => {
       const msgs = snapshot.docs.map(doc => doc.data());
       this.messages.set(msgs);
-      setTimeout(() => {
-        this.scrollToBottom();
-      }, 0);
+      setTimeout(() => this.scrollToBottom(), 0);
     });
   }
 
-  async sendMessage() {
+  async sendMessage() 
+  {
     const trimmed = this.newMessage.trim();
     if (!trimmed) return;
 
-    this.newMessage = ''; // moved up to avoid delay in messages
+    this.newMessage = ''; // ✅ Clear input instantly (prevents flicker or double input)
 
     const messageData = {
       senderId: this.user.uid,
@@ -126,26 +108,30 @@ export class ChatRoomComponent implements OnInit {
       chatId: this.chatId
     };
 
-    try {
-      // const messagesRef = collection(this.firestore, `chats/${this.chatId}/messages`);
+    try 
+    {
       const messagesRef = collection(this.firestore, 'messages');
       await addDoc(messagesRef, messageData);
-     
-      this.scrollToBottom()
-    } catch (err) {
+      this.scrollToBottom();
+    } 
+    catch (err) {
       console.error('Error sending message:', err);
     }
   }
 
-  scrollToBottom(): void {
-    this.chatContainer.nativeElement.scrollTo({
-      top: this.chatContainer.nativeElement.scrollHeight,
-      // behavior: 'smooth'
-    });
+  scrollToBottom(): void 
+  {
+    if (this.chatContainer) 
+    {
+      this.chatContainer.nativeElement.scrollTo({
+        top: this.chatContainer.nativeElement.scrollHeight,
+        // behavior: 'smooth'
+      });
+    }
   }
 
-  //Check if its Today
-  isToday(date: Date): boolean {
+  isToday(date: Date): boolean 
+  {
     const today = new Date();
     return (
       date.getDate() === today.getDate() &&
@@ -154,9 +140,9 @@ export class ChatRoomComponent implements OnInit {
     );
   }
 
-  getDateFormat(timestamp: any): string {
-    const date = timestamp.toDate(); // Firestore Timestamp to JS Date
+  getDateFormat(timestamp: any): string 
+  {
+    const date = timestamp.toDate();
     return this.isToday(date) ? 'shortTime' : 'medium';
   }
-
 }
