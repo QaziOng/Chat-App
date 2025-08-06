@@ -4,7 +4,11 @@
   
 
   <div class="messages" #chatContainer>
-    <div *ngFor="let msg of messages()" class="message" [ngClass]="{ 'own-message': msg.senderId === userId }">
+    <div 
+    *ngFor="let msg of messages()" 
+    class="message" 
+    [ngClass]="{ 'own-message': msg.senderId === userId }">
+    
       <!-- <strong>{{ msg.senderName ? msg.senderName : msg.senderEmail }}:</strong> -->
       {{ msg.message }}
       <div class="timeStamp">
@@ -21,6 +25,7 @@
       required
       placeholder="Type your message..."
       class="chat-input"
+      autocomplete="off"  
     />
     <button type="submit" [disabled]="!newMessage.trim()">Send</button>
   </form>
