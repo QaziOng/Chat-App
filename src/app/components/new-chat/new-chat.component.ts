@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgIf, NgFor } from '@angular/common';
 import { useChatStore } from '../../stores/chat.store';
-import { MatDialogRef } from '@angular/material/dialog';
+// import { MatDialogRef } from '@angular/material/dialog';
 import {
   Firestore,
   collection,
@@ -31,7 +31,7 @@ export class NewChatComponent {
   private chatStore = inject(useChatStore);
   private router = inject(Router);
   private firestore = inject(Firestore);
-  private dialogRef = inject(MatDialogRef<NewChatComponent>);
+  // private dialogRef = inject(MatDialogRef<NewChatComponent>);
 
   async searchUsers(): Promise<void> {
     const queryText = this.searchQuery.trim();
@@ -81,7 +81,7 @@ export class NewChatComponent {
       if (chatId) {
         this.errorMessage.set(null);
         await this.router.navigate(['/home/chat'], { queryParams: { id: chatId } });
-        this.dialogRef.close();
+        // this.dialogRef.close();
       } else {
         this.errorMessage.set('User not found or unable to start chat.');
       }
@@ -97,7 +97,7 @@ export class NewChatComponent {
 
   onBackdropClick(event: MouseEvent) {
     if (event.target === event.currentTarget) {
-      this.dialogRef.close();
+      // this.dialogRef.close();
     }
   }
 }
