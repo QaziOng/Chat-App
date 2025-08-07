@@ -1,4 +1,4 @@
-.modal-overlay {
+.new-chat-container {
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.2);
@@ -8,7 +8,7 @@
   z-index: 999;
 }
 
-.new-chat-container {
+.new-chat-wrapper {
   width: 90%;
   max-width: 500px; // ⬅️ Made wider
   background: white;
