@@ -46,9 +46,9 @@
         msg.isLastInGroup ? 'last' : ''
       ]"
     >
-      {{ msg.message }}
+      <span class="text">{{ msg.message }}</span>
       <div class="timeStamp">
-        <!-- {{ msg.timestamp?.toDate() | date: getDateFormat(msg.timestamp) }} -->
+         {{ msg.timestamp?.toDate() | date: 'shortTime' }}
       </div>
     </div>
   </div>
