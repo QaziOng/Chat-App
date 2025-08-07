@@ -31,7 +31,8 @@
       class="chat-input"
       autocomplete="off"  
     />
-    <button type="submit" [disabled]="!newMessage.trim()">Send</button>
+    <button type="submit" [disabled]="!newMessage.trim()" >Send</button>
+    <button (click)="scrollToBottom()">Force Scroll</button>
   </form>
 </div>
 

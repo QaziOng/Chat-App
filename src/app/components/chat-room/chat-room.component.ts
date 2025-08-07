@@ -35,6 +35,10 @@ import { useChatStore } from '../../stores/chat.store';
 export class ChatRoomComponent implements OnInit, AfterViewInit {
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
+  
+
+
+
   // Angular injectors
   private firestore = inject(Firestore);
   private auth = inject(Auth);
@@ -54,10 +58,12 @@ export class ChatRoomComponent implements OnInit, AfterViewInit {
   private unsubscribeSnapshot: () => void = () => {};
 
   ngOnInit(): void {
+    this.scrollToBottom();
     // Load chat ID from URL query params
     this.route.queryParams.subscribe((params) => {
       this.chatId = params['id'];
       this.loadMessages();
+      
     });
 
     // Auth state watcher
@@ -71,6 +77,7 @@ export class ChatRoomComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    
     effect(() => {
       // Auto-scroll when messages update
       this.messages();
@@ -95,6 +102,7 @@ export class ChatRoomComponent implements OnInit, AfterViewInit {
       const msgs = snapshot.docs.map((doc) => doc.data());
       const grouped = this.groupMessages(msgs);
       this.messages.set(grouped);
+      setTimeout(() => this.scrollToBottom(), 0);
     });
   }
 
@@ -115,6 +123,8 @@ export class ChatRoomComponent implements OnInit, AfterViewInit {
       };
     });
   }
+
+  
 
   async sendMessage(): Promise<void> {
     const trimmed = this.newMessage.trim();
@@ -142,9 +152,10 @@ export class ChatRoomComponent implements OnInit, AfterViewInit {
   scrollToBottom(): void {
     if (this.chatContainer) {
       const el = this.chatContainer.nativeElement;
-      el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
+      el.scrollTo({ top: el.scrollHeight });
     }
   }
+
 
   getReceiverName(): string {
     const msgs = this.messages();
