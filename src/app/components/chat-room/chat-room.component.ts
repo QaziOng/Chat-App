@@ -35,7 +35,16 @@ import { useChatStore } from '../../stores/chat.store';
 export class ChatRoomComponent implements OnInit, AfterViewInit {
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
-  
+  showScrollButton = false;
+
+  onScroll(): void {
+    const element = this.chatContainer.nativeElement;
+
+    const threshold = 100; // You can adjust this
+    const distanceFromBottom = element.scrollHeight - element.scrollTop - element.clientHeight;
+
+    this.showScrollButton = distanceFromBottom > threshold;
+  }
 
 
 
@@ -154,6 +163,7 @@ export class ChatRoomComponent implements OnInit, AfterViewInit {
       const el = this.chatContainer.nativeElement;
       el.scrollTo({ top: el.scrollHeight });
     }
+    this.showScrollButton = false;
   }
 
 
