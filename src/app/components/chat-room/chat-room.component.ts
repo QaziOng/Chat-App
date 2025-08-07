@@ -120,6 +120,8 @@ export class ChatRoomComponent implements OnInit, AfterViewInit {
     const trimmed = this.newMessage.trim();
     if (!trimmed) return;
 
+    this.newMessage = '';
+
     const messageData = {
       senderId: this.user.uid,
       senderEmail: this.user.email,
@@ -131,7 +133,7 @@ export class ChatRoomComponent implements OnInit, AfterViewInit {
 
     try {
       await this.chatStore.sendMessage(messageData);
-      this.newMessage = '';
+      
     } catch (err) {
       console.error('Error sending message:', err);
     }

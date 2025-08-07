@@ -22,7 +22,7 @@ import {
   selector: 'app-new-chat',
   standalone: true,
   imports: [FormsModule, NgIf, NgFor],
-  templateUrl: 'new-chat.component.html',
+  templateUrl: './new-chat.component.html',
   styleUrls: ['./new-chat.component.scss'],
 })
 export class NewChatComponent {
@@ -35,8 +35,9 @@ export class NewChatComponent {
   private router = inject(Router);
   private firestore = inject(Firestore);
 
-  private dialogRef = inject(DynamicDialogRef);
-  private config = inject(DynamicDialogConfig);
+  // Injected only when opened via DialogService
+  private dialogRef = inject(DynamicDialogRef, { optional: true });
+  private config = inject(DynamicDialogConfig, { optional: true });
 
   async searchUsers(): Promise<void> {
     const queryText = this.searchQuery.trim();
@@ -81,7 +82,9 @@ export class NewChatComponent {
       if (chatId) {
         this.errorMessage.set(null);
         await this.router.navigate(['/home/chat'], { queryParams: { id: chatId } });
-        this.dialogRef.close(); // ✅ Close PrimeNG dialog
+
+        // ✅ Close dialog if opened from DialogService
+        this.dialogRef?.close();
       } else {
         this.errorMessage.set('User not found or unable to start chat.');
       }
@@ -97,7 +100,7 @@ export class NewChatComponent {
 
   onBackdropClick(event: MouseEvent) {
     if (event.target === event.currentTarget) {
-      this.dialogRef.close(); // ✅ Close on backdrop click
+      this.dialogRef?.close();
     }
   }
 }

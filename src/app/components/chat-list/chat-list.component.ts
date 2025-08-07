@@ -32,7 +32,7 @@ export class ChatListComponent implements OnInit
 
   openNewChatPopup() {
     this.dialogRef = this.dialogService.open(NewChatComponent, {
-      header: 'Start New Chat',
+      header: '',
       width: '400px',
       dismissableMask: true,
       styleClass: 'p-dialog-custom',
