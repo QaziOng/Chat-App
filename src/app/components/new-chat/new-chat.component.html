@@ -1,47 +1,44 @@
-<div class="modal-overlay" (click)="onBackdropClick($event)">
-  <div class="new-chat-container" (click)="$event.stopPropagation()">
-    <div class="new-chat-header">
-      <h2>Start a New Chat</h2>
-    </div>
+<!-- This file: new-chat.component.html -->
 
-    <div class="new-chat-form-container">
-      <div class="new-chat-form-box">
+<div class="new-chat-wrapper">
 
-        <!-- Error -->
-        <div *ngIf="errorMessage()" class="error-message" role="alert">
-          <span>{{ errorMessage() }}</span>
-        </div>
+  <!-- Header -->
+  <div class="new-chat-header">
+    <h2>Start a New Chat</h2>
+  </div>
 
-        <!-- Search Bar -->
-        <div class="search-bar">
-          <input
-            type="text"
-            placeholder="Enter user's name or email"
-            [(ngModel)]="searchQuery"
-            (keyup.enter)="searchUsers()"
-          />
-          <button (click)="searchUsers()" class="search-icon">
-            <i class="fas fa-search"></i>
-          </button>
-        </div>
+  <!-- Error -->
+  <div *ngIf="errorMessage()" class="error-message" role="alert">
+    {{ errorMessage() }}
+  </div>
 
-        <!-- Users List -->
-        <div class="user-list" *ngIf="filteredUsers.length > 0">
-          <div
-            class="user-item"
-            *ngFor="let user of filteredUsers"
-            (click)="startChat(user)"
-          >
-            {{ user.displayName || user.email }}
-          </div>
-        </div>
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <input
+      type="text"
+      placeholder="Enter user's name or email"
+      [(ngModel)]="searchQuery"
+      (keyup.enter)="searchUsers()"
+    />
+    <button (click)="searchUsers()" class="search-icon">
+      <i class="fas fa-search"></i>
+    </button>
+  </div>
 
-        <!-- No Results -->
-        <div class="no-results" *ngIf="searchPerformed && filteredUsers.length === 0">
-          No users found.
-        </div>
-
-      </div>
+  <!-- User Results -->
+  <div class="user-list" *ngIf="filteredUsers.length > 0">
+    <div
+      class="user-item"
+      *ngFor="let user of filteredUsers"
+      (click)="startChat(user)"
+    >
+      {{ user.displayName || user.email }}
     </div>
   </div>
+
+  <!-- No Results -->
+  <div class="no-results" *ngIf="searchPerformed && filteredUsers.length === 0">
+    No users found.
+  </div>
+
 </div>

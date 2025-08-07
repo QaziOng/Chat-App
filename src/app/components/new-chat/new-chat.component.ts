@@ -1,19 +1,22 @@
+// src/app/components/new-chat/new-chat.component.ts
+
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgIf, NgFor } from '@angular/common';
 import { useChatStore } from '../../stores/chat.store';
-// import { MatDialogRef } from '@angular/material/dialog';
 import {
   Firestore,
   collection,
   query,
   where,
   getDocs,
-  DocumentData,
-  or,
 } from '@angular/fire/firestore';
 import { AppUser } from '../../stores/auth.store';
+import {
+  DynamicDialogRef,
+  DynamicDialogConfig,
+} from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-new-chat',
@@ -31,7 +34,9 @@ export class NewChatComponent {
   private chatStore = inject(useChatStore);
   private router = inject(Router);
   private firestore = inject(Firestore);
-  // private dialogRef = inject(MatDialogRef<NewChatComponent>);
+
+  private dialogRef = inject(DynamicDialogRef);
+  private config = inject(DynamicDialogConfig);
 
   async searchUsers(): Promise<void> {
     const queryText = this.searchQuery.trim();
@@ -51,13 +56,10 @@ export class NewChatComponent {
       );
 
       const snapshot = await getDocs(displayNameQuery);
-
       const results = snapshot.docs.map(doc => doc.data() as AppUser);
       const currentUserId = this.chatStore.getCurrentUserId();
-
       this.filteredUsers = results.filter(user => user.uid !== currentUserId);
 
-      // Optionally search by email if displayName returns no results
       if (this.filteredUsers.length === 0) {
         const emailQuery = query(usersRef, where('email', '==', this.searchQuery));
         const emailSnapshot = await getDocs(emailQuery);
@@ -66,7 +68,6 @@ export class NewChatComponent {
           .filter(user => user.uid !== currentUserId);
         this.filteredUsers = emailResults;
       }
-
     } catch (error) {
       console.error('Error searching users:', error);
       this.errorMessage.set('Error searching users. Please try again.');
@@ -77,11 +78,10 @@ export class NewChatComponent {
   async startChat(user: AppUser) {
     try {
       const chatId = await this.chatStore.createNewChat(user.email);
-
       if (chatId) {
         this.errorMessage.set(null);
         await this.router.navigate(['/home/chat'], { queryParams: { id: chatId } });
-        // this.dialogRef.close();
+        this.dialogRef.close(); // ✅ Close PrimeNG dialog
       } else {
         this.errorMessage.set('User not found or unable to start chat.');
       }
@@ -97,7 +97,7 @@ export class NewChatComponent {
 
   onBackdropClick(event: MouseEvent) {
     if (event.target === event.currentTarget) {
-      // this.dialogRef.close();
+      this.dialogRef.close(); // ✅ Close on backdrop click
     }
   }
 }

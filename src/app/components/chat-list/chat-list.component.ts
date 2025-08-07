@@ -1,31 +1,23 @@
-// src/app/components/chat-list/chat-list.component.ts
-
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { Chat, useChatStore } from '../../stores/chat.store';
 import { useAuthStore } from '../../stores/auth.store';
-import { DatePipe } from '@angular/common';
-import { MatDialog } from '@angular/material/dialog';
+import { DatePipe, NgIf, NgFor } from '@angular/common';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { NewChatComponent } from '../new-chat/new-chat.component';
 
 @Component({
   selector: 'app-chat-list',
   standalone: true,
-  imports: [RouterModule, DatePipe],
+  imports: [RouterModule, DatePipe], // ✅ Add structural directives if needed in HTML
+  providers: [DialogService],           // ✅ Required for PrimeNG Dialog to work
   templateUrl: 'chat-list.component.html',
-  styleUrl: 'chat-list.component.scss',
+  styleUrls: ['chat-list.component.scss'], // ✅ Corrected 'styleUrl' to 'styleUrls'
 })
-export class ChatListComponent implements OnInit {
-
-  constructor(private dialog: MatDialog) {}
-  
-  openNewChatPopup() {
-    this.dialog.open(NewChatComponent, {
-      width: '400px', // optional
-      data: {},
-    });
-  }
-
+export class ChatListComponent implements OnInit 
+{
+  private dialogService = inject(DialogService);
+  private dialogRef?: DynamicDialogRef;
 
   chatStore = inject(useChatStore);
   authStore = inject(useAuthStore);
@@ -35,22 +27,30 @@ export class ChatListComponent implements OnInit {
     const userId = this.authStore.currentUser()?.uid;
     if (userId) {
       this.chatStore.listenToChats(userId);
-    } else {
-      // this.router.navigate(['/login']);
     }
+  }
+
+  openNewChatPopup() {
+    this.dialogRef = this.dialogService.open(NewChatComponent, {
+      header: 'Start New Chat',
+      width: '400px',
+      dismissableMask: true,
+      styleClass: 'p-dialog-custom',
+      data: {}
+    });
   }
 
   getChatName(chat: Chat): string {
     if (chat.participantNames) {
       return chat.participantNames
-        .filter((name) => name !== this.authStore.currentUser()?.displayName)
+        .filter(name => name !== this.authStore.currentUser()?.displayName)
         .join(', ');
     }
     return 'Loading...';
   }
 
   goToChat(chat: Chat) {
-    this.router.navigate(['/chat-room', chat.id]); // Passes chat.id to route
+    this.router.navigate(['/chat-room', chat.id]);
   }
 
   logout() {
