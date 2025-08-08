@@ -56,7 +56,8 @@ export const useAuthStore = createInjectable(() => {
       );
       await createUserInFirestore({ ...userCredential.user, displayName });
       const appUser = await getUserFromFirestore(userCredential.user.uid);
-      currentUser.set(userCredential.user);
+      // currentUser.set(userCredential.user);
+      currentUser.set(appUser);
     } catch (error: any) {
       console.error('Signup error:', error);
       switch (error.code) {
@@ -86,7 +87,8 @@ export const useAuthStore = createInjectable(() => {
         password
       );
       const appUser = await getUserFromFirestore(userCredential.user.uid);
-      currentUser.set(userCredential.user);
+      // currentUser.set(userCredential.user);
+      currentUser.set(appUser);
     } catch (error: any) {
       console.error('Login error:', error);
       switch (error.code) {
