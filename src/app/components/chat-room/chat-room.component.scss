@@ -11,12 +11,27 @@
   height: 100%;
   position: relative;
 
+  .pi-arrow-down {
+    font-size: 1.2rem;
+    color: #ffffff;
+    cursor: pointer;
+    position: absolute;
+    right: 29%;
+    bottom: 30%;
+
+      &:hover {
+      color: #ffffff;
+      }
+    }
+
   .scroll-button {
     position: absolute;
     bottom: 120px; /* Above input box */
+    width: 3rem; // SMOKEYY added
+    height: 3rem; // SMOKEYY added
     right: 45px;
     z-index: 10;
-    padding: 2px;
+    padding: 0px;
     background-color: #007bff;
     color: white;
     border: none;
@@ -25,6 +40,8 @@
     font-size: 4px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     transition: opacity 0.3s ease;
+
+    
   }
 
   .scroll-button:hover {

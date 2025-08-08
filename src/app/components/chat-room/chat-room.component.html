@@ -32,7 +32,7 @@
       autocomplete="off"  
     />
     <button type="submit" [disabled]="!newMessage.trim()" >Send</button>
-    <button *ngIf="showScrollButton" (click)="scrollToBottom()" class="scroll-button">🖕</button>
+    <button *ngIf="showScrollButton" (click)="scrollToBottom()" class="scroll-button"><i class="pi pi-arrow-down"></i></button>
   </form>
 </div>
 
