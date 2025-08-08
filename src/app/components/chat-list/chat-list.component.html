@@ -18,7 +18,7 @@
                 <div class="chat-item-header">
                   <p class="chat-name">{{ getChatName(chat) }}</p>
                   <div class="chat-time">
-                    <p class="timestamp">{{ chat.lastMessageTimestamp.toDate() | date : 'short' }}</p>
+                    <p class="timestamp">{{ chat.lastMessageTimestamp.toDate() | date : 'dd MMM yyyy, h:mm a' }}</p>
                   </div>
                 </div>
                 <div class="chat-item-body">
