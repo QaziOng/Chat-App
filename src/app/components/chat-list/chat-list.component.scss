@@ -1,6 +1,6 @@
 .page-container {
   display: flex;
-  min-height: 100vh;
+  height: 91vh;
   background-color: #f7f7f7;
 }
 
@@ -35,6 +35,14 @@
   font-weight: 700;
   margin-bottom: 1.5rem;
   color: #1f2937;
+  .chat-title-btn{
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1f2937;
+    border: 0;
+    background-color: white;
+  }
 }
 
 .start-chat-btn {
