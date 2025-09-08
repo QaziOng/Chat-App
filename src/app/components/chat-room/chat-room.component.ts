@@ -66,6 +66,14 @@ export class ChatRoomComponent implements OnInit, AfterViewInit {
   chatId = '';
   private unsubscribeSnapshot: () => void = () => {};
 
+  constructor() {
+    effect(() => {
+      // Auto-scroll when messages update
+      this.messages();
+      setTimeout(() => this.scrollToBottom(), 0);
+    });
+  }
+
   ngOnInit(): void {
     this.scrollToBottom();
     // Load chat ID from URL query params
@@ -86,12 +94,6 @@ export class ChatRoomComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    
-    effect(() => {
-      // Auto-scroll when messages update
-      this.messages();
-      setTimeout(() => this.scrollToBottom(), 0);
-    });
   }
 
   ngOnDestroy(): void {

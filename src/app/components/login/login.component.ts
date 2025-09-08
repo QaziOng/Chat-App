@@ -1,9 +1,8 @@
 // src/app/components/login/login.component.ts
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule, RouterOutlet } from '@angular/router';
-import { useAuthStore } from '../../stores/auth.store';
-import { ChatListComponent } from '../chat-list/chat-list.component';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,31 +12,38 @@ import { ChatListComponent } from '../chat-list/chat-list.component';
   styleUrl: 'login.component.scss'
 })
 export class LoginComponent {
-  email = '';
+  userName = '';
   password = '';
-  showPassword: boolean = false;               // password visibility
+  showPassword: boolean = false;
   errorMessage = signal<string | null>(null);
-  private authStore = inject(useAuthStore);
-  private router = inject(Router);
 
-  async onSubmit() {
-    try {
-      await this.authStore.login(this.email, this.password);
-      this.router.navigate(['home']);
-      // Navigate to chat list after successful login
-    } catch (error) {
-      console.error('Login error:', error);
-      if (error instanceof Error) {
-        this.errorMessage.set(error.message);
-      } else {
-        this.errorMessage.set(
-          'An unexpected error occurred. Please try again.'
-        );
+  private router = inject(Router);
+  private authService = inject(AuthService);
+
+  onSubmit() {
+    const model = {
+      userName: this.userName,   // backend expects "userName"
+      password: this.password
+    };
+
+    this.authService.login(model).subscribe({
+      next: (res) => {
+        console.log('Login success:', res);
+
+        // Save JWT token
+        localStorage.setItem('token', res.token);
+
+        // Navigate to home after login
+        this.router.navigate(['home']);
+      },
+      error: (err) => {
+        console.error('Login error:', err);
+        this.errorMessage.set('Invalid username or password');
       }
-    }
+    });
   }
 
-  togglePasswordVisibility(): void {         // password visibility
+  togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
   }
 }
